@@ -86,14 +86,14 @@ For more information:
 ![Schematic](print/eeprom_programmer.png)
 
 ### Micro Processor
-The micro processor used in this project is the popular [ATmega8 (U1)](https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2486-8-bit-AVR-microcontroller-ATmega8_L_datasheet.pdf), a cheaper version of the ATmega328 used in the [Arduino Uno](https://store.arduino.cc/arduino-uno-rev3). It handles everything: the serial communication, address bus and the data bus. U2 (MCP2221) handles the USB to UART conversion so no external ftdi cable is needed. The supply voltage is conveniantly given by the USB port also. Because data bus of the EEPROM is bidirectional it is directly connected to the processor. It needs to handle setting the bus as input or output. See [`code/eeprom.c`](code/eeprom.c) for everything I/O related. The UART is handled in [`/code/uart.c`](code/uart.c). And the communication protocol is defined in [`/code/parser.c`](code/parser.c) and in [`/code/main.c`](code/main.c).
+The micro processor used in this project is the popular [ATmega8 (U1)](https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2486-8-bit-AVR-microcontroller-ATmega8_L_datasheet.pdf), a cheaper version of the ATmega328 used in the [Arduino Uno](https://store.arduino.cc/arduino-uno-rev3). It handles everything: the serial communication, address bus and the data bus. U2 (MCP2221) handles the USB to UART conversion so no external ftdi cable is needed. The supply voltage is conveniantly given by the USB port also. Because data bus of the EEPROM is bidirectional it is directly connected to the processor. The micro processor needs to handle setting the bus as input or output. See [`eeprom.c`](code/eeprom.c) for everything I/O related. The UART is handled in [`uart.c`](code/uart.c). And the communication protocol is defined in [`parser.c`](code/parser.c) and in [`main.c`](code/main.c).
 
 ### Shift Registers
-The shift registers (U3, U4) are utilized to expand the IO of the processor. Just 3 bits are needed to set the address bus to the target address. Since the address bus is only one way no data needs to be read from the address bus thus making shift registers the obvious choice for this situation. See [`/code/eeprom.c: addrbus_set()`](code/eeprom.c) for how the data is latched.
+The shift registers (U3, U4) are utilized to expand the IO of the processor. Just 3 bits are needed to set the address bus to the target address. Since the address bus is only one way no data needs to be read from the address bus thus making shift registers the obvious choice for this situation. See [`eeprom.c: addrbus_set()`](code/eeprom.c) for how the data is latched.
 
 ### EEPROM
 
-The EEPROM uses a parallel interface for communication. The address bus (A0-A14) is a parallel input which sets the memory location to read or write. The control lines ~WE and ~OE (active low) tell the EEPROM to read or write from/to the memory. The data is read from or sent out the parallel data bus (D0-D7) depending on the state of the control lines. Some EEPROMs have Write-Protect enabled. A algorithm (see datasheet) is implemented to deactivate write protection. See [`/code/eeprom.c: eeprom_disable_protect()`](code/eeprom.c) for how this works.
+The EEPROM uses a parallel interface for communication. The address bus (A0-A14) is a parallel input which sets the memory location to read or write. The control lines ~WE and ~OE (active low) tell the EEPROM to read or write from/to the memory. The data is read from or sent out the parallel data bus (D0-D7) depending on the state of the control lines. Some EEPROMs have Write-Protect enabled. A algorithm (see datasheet) is implemented to deactivate write protection. See [`eeprom.c: eeprom_disable_protect()`](code/eeprom.c) for how this works.
 
 
 
@@ -101,9 +101,9 @@ The EEPROM uses a parallel interface for communication. The address bus (A0-A14)
 
 Note: The pcb is designed so that the top layer represents jumpers. The vias are large enough to stick a wire through.
 
-For the schematic and pcb layout I used [KiCad](https://kicad.org/), a very awsome open source EDA.
+For the schematic and pcb layout I used [KiCad](https://kicad.org/), a very awsome open source EDA. The clearances and spaces are designed for diy home etching so nothing really fancy. See [`eeprom_programmer_bom.pdf`](bom/eeprom_programmer_bom.pdf) for the bill of materials. At the moment the whole project would cost you around 26€ plus a weekend of time.
 
-The clearances and spaces are designed for diy home etching. Nothing really fancy.
+![Overlay](gerber/eeprom_programmer-overlay.png)
 
 ![PCB](pictures/pcb_soldered.jpg)
 
