@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Atmega",
+            "includePath": [
+                "/usr/lib/avr/include/"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega8",
+                "-DF_CPU=2000000UL"
+            ],
+            "cStandard": "c99",
+            "cppStandard": "c++11"
+        }
+    ],
+    "version": 4
+}
