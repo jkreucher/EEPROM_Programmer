@@ -76,14 +76,14 @@ For the schematic and pcb layout I used [KiCad](https://kicad.org/), a very awso
 
 The clearances and spaces are designed for diy home etching. Nothing really fancy.
 
-![Alt text](pictures/pcb_soldered.jpg?raw=true "PCB Picture")
+![PCB](pictures/pcb_soldered.jpg)
 
 
 ## Enclosure
 
 The very simple, easy and fast to print enclosure consists of two parts which sandwhich the pcb. Needed are just *4x M3,5x12mm* wood screws to assemble the enclosure.
 
-![Alt text](pictures/case.jpg?raw=true "Case Picture")
+![Enclosure](pictures/case.jpg)
 
 
 ## License
