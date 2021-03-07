@@ -103,8 +103,6 @@ Note: The pcb is designed so that the top layer represents jumpers. The vias are
 
 For the schematic and pcb layout I used [KiCad](https://kicad.org/), a very awsome open source EDA. The clearances and spaces are designed for diy home etching so nothing really fancy. See [`eeprom_programmer_bom.pdf`](bom/eeprom_programmer_bom.pdf) for the bill of materials. At the moment the whole project would cost you around 26€ plus a weekend of time.
 
-![Overlay](gerber/eeprom_programmer-overlay.png)
-
 ![PCB](pictures/pcb_soldered.jpg)
 
 
