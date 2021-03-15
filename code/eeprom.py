@@ -104,7 +104,7 @@ if __name__ == "__main__":
 		print("[*] Erasing EEPROM (%d bytes)" % eeprom_size)
 		while eeprom_addr < eeprom_size:
 			written = programmer.write_byte(eeprom_addr, 0xFF)
-			time.sleep(0.001)
+			time.sleep(0.005)
 			programmer.progressbar(eeprom_addr, eeprom_size)
 			if written != 0xFF:
 				print("\n[!] Failed to erase byte %d" % eeprom_addr)
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 				break
 			# write data to eeprom
 			written = programmer.write_byte(eeprom_addr, ord(data))
-			time.sleep(0.001)
+			time.sleep(0.005)
 			programmer.progressbar(eeprom_addr, os.path.getsize(args.write))
 			if written != ord(data):
 				print("\n[!] Failed to write byte %d" % eeprom_addr)
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 		while eeprom_addr < eeprom_size:
 			# read byte from eeprom
 			data = programmer.read_byte(eeprom_addr)
-			time.sleep(0.001)
+			time.sleep(0.005)
 			programmer.progressbar(eeprom_addr, eeprom_size)
 			f.write(data.to_bytes(1, 'big'))
 			eeprom_addr += 1
