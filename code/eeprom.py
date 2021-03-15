@@ -10,6 +10,7 @@
 import serial
 import sys
 import os
+import time
 from argparse import ArgumentParser, HelpFormatter
 
 
@@ -18,6 +19,8 @@ class eeprom_prog:
 	def __init__(self, port, baud):
 		try:
 			self.serport = serial.Serial(port, baud, timeout=2)
+			# delete everything that we received until now (ignore that)
+			self.serport.flush()
 		except:
 			print("[-] Failed to open serial port: "+port)
 			exit()
@@ -26,24 +29,18 @@ class eeprom_prog:
 		self.serport.close()
 
 	def read_byte(self, address):
-		# delete everything that we received until now (ignore that)
-		self.serport.flush()
 		# write address to programmer
 		self.serport.write(("r%04x" % address).encode("ascii"))
 		# read two bytes and convert to value
 		return int( self.serport.read(2).decode("ascii"), 16 )
 	
 	def write_byte(self, address, data):
-		# delete everything that we received until now (ignore that)
-		self.serport.flush()
 		# write address and data to programmer
 		self.serport.write( ("w%04x%02x" % (address, data)).encode("ascii") )
 		# read byte written to eeprom (convert from hex str to value)
 		return int( self.serport.read(2).decode("ascii"), 16 )
 	
 	def diable_protect(self):
-		# delete everything that we received until now (ignore that)
-		self.serport.flush()
 		# tell programmer to diable write protect
 		self.serport.write('d'.encode("ascii"))
 		# return response
@@ -55,6 +52,13 @@ class eeprom_prog:
 			for col in range(16):
 				row_str += "%02X " % self.read_byte( (row<<4)+col )
 			print(("%04X: "%(row<<4)) + row_str)
+	
+	def progressbar(self, val, maxval, length=40, fillchar="#", emptychar="-"):
+		length_fill = int( float(val) / float(maxval) * float(length) )
+		chars = fillchar*length_fill + emptychar*(length-length_fill)
+		outstr = "\rProgress: ["+chars+"] %6.2f" % (float(val)/float(maxval)*100.0)
+		outstr += " %"
+		print(outstr, end="", flush=True)
 
 
 # only execute when not called by another python program
@@ -100,13 +104,15 @@ if __name__ == "__main__":
 		print("[*] Erasing EEPROM (%d bytes)" % eeprom_size)
 		while eeprom_addr < eeprom_size:
 			written = programmer.write_byte(eeprom_addr, 0xFF)
+			#time.sleep(0.001)
+			programmer.progressbar(eeprom_addr, eeprom_size)
 			if written != 0xFF:
-				print("[!] Failed to erase byte %d" % eeprom_addr)
+				print("\n[!] Failed to erase byte %d" % eeprom_addr)
 				programmer.close()
 				exit()
 			eeprom_addr += 1
 		eeprom_addr = args.start
-		print("[+] Done")
+		print("\n[+] Done")
 
 	# check what to do next
 	if args.write:
@@ -131,14 +137,16 @@ if __name__ == "__main__":
 				break
 			# write data to eeprom
 			written = programmer.write_byte(eeprom_addr, ord(data))
+			#time.sleep(0.001)
+			programmer.progressbar(eeprom_addr, os.path.getsize(args.write))
 			if written != ord(data):
-				print("[!] Failed to write byte %d" % eeprom_addr)
+				print("\n[!] Failed to write byte %d" % eeprom_addr)
 				programmer.close()
 				exit()
 			# next addr
 			eeprom_addr += 1
 		f.close()
-		print("[+] Done")
+		print("\n[+] Done")
 	
 	elif args.read:
 		print("[*] Writing %d bytes to file" % eeprom_size)
@@ -146,10 +154,12 @@ if __name__ == "__main__":
 		while eeprom_addr < eeprom_size:
 			# read byte from eeprom
 			data = programmer.read_byte(eeprom_addr)
+			#time.sleep(0.001)
+			programmer.progressbar(eeprom_addr, eeprom_size)
 			f.write(data.to_bytes(1, 'big'))
 			eeprom_addr += 1
 		f.close()
-		print("[+] Done")
+		print("\n[+] Done")
 
 	else:
 		if not args.erase and not args.off:
