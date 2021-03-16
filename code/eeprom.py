@@ -11,6 +11,7 @@ import serial
 import sys
 import os
 import time
+import math
 from argparse import ArgumentParser, HelpFormatter
 
 
@@ -138,7 +139,7 @@ if __name__ == "__main__":
 			# write data to eeprom
 			written = programmer.write_byte(eeprom_addr, ord(data))
 			time.sleep(0.005)
-			programmer.progressbar(eeprom_addr, os.path.getsize(args.write))
+			programmer.progressbar(eeprom_addr, os.path.getsize(args.write)-1)
 			if written != ord(data):
 				print("\n[!] Failed to write byte %d" % eeprom_addr)
 				programmer.close()
