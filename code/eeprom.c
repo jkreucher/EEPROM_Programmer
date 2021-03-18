@@ -51,9 +51,9 @@ void addrbus_set(unsigned short addr) {
 	for(int i=0; i<16; i++) {
 		// handle each data bit (msb first)
 		if( ((addr << i) & 0x8000) == 0 ) {
-			PORTD |= PIN_SDAT; // sdat high
-		} else {
 			PORTD &= ~PIN_SDAT; // sdat low
+		} else {
+			PORTD |= PIN_SDAT; // sdat high
 		}
 		// shift data (rising edge)
 		PORTD |= PIN_SCLK;

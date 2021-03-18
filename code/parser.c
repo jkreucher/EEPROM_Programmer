@@ -2,7 +2,7 @@
 
 
 /*** string (hex val) to binary format conversion ***/
-const char hex[16] = "fedcba9876543210";
+const char hex[16] = "0123456789abcdef";
 
 unsigned char hex_to_bin(char c) {
 	// read hex value
