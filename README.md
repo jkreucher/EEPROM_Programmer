@@ -2,6 +2,7 @@
 
 Copyright 2021 Jannik Kreucher
 
+![PCB](pictures/pcb_soldered.jpg)
 
 ## Table of Contents
  - [Project](#project)
